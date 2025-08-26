@@ -25,7 +25,7 @@ Since the Kaggle dataset may not always be available, this project includes a re
 
 ## Methodology
 
-### RFM Analysis
+### Step 1: RFM Analysis
 RFM (Recency, Frequency, Monetary) analysis is a marketing technique used to determine customer value by examining:
 
 1. **Recency (R)**: How recently a customer has made a purchase
@@ -39,6 +39,29 @@ RFM (Recency, Frequency, Monetary) analysis is a marketing technique used to det
 3. **Monetary (M)**: How much money a customer spends
    - Total spending amount across all transactions
    - Higher values indicate higher customer value
+
+### Step 2: Data Scaling
+Before applying clustering algorithms, RFM metrics are standardized using `StandardScaler` from scikit-learn. This is crucial because:
+
+- **Different Scales**: RFM metrics have vastly different scales (e.g., Recency: 1-723 days, Monetary: $214-$108,384)
+- **Clustering Performance**: Algorithms like K-means are sensitive to feature scales
+- **Fair Comparison**: Ensures all features contribute equally to the clustering process
+
+**Scaling Process**:
+- **StandardScaler**: Transforms features to have mean=0 and standard deviation=1
+- **Formula**: `z = (x - μ) / σ` where μ is the mean and σ is the standard deviation
+- **Result**: All features are on the same scale for fair clustering
+
+**Example Scaled Data**:
+```
+CustomerID  Recency_Scaled  Frequency_Scaled  Monetary_Scaled
+CUST_0001       -0.871         -0.228        -1.214
+CUST_0002        2.568         -0.706        -0.355
+CUST_0003       -0.793          0.729         0.598
+CUST_0004        0.704         -0.706        -0.722
+```
+
+**Testing**: A test script (`src/test_scaling.py`) verifies that scaled features have mean ≈ 0 and std ≈ 1 within tolerance.
 
 ### Clustering Approach
 The project uses machine learning clustering algorithms to group customers based on their RFM scores:
@@ -55,11 +78,14 @@ customer-segmentation/
 │   ├── raw/                    # Original/simulated transaction data
 │   │   └── sample_transactions.csv
 │   └── processed/              # Cleaned and processed data
-│       └── rfm_table.csv
+│       ├── rfm_table.csv       # RFM metrics per customer
+│       └── rfm_scaled.csv      # Scaled RFM data for clustering
 ├── notebooks/                  # Jupyter notebooks for analysis
 │   └── 01_rfm_analysis.ipynb
 ├── src/                        # Python source code
-│   └── rfm_analysis.py
+│   ├── rfm_analysis.py         # Step 1: RFM analysis
+│   ├── rfm_scaling.py          # Step 2: Data scaling
+│   └── test_scaling.py         # Scaling verification tests
 ├── streamlit_app/              # Interactive web application
 ├── reports/                    # Generated reports and visualizations
 │   └── figures/
@@ -107,17 +133,33 @@ customer-segmentation/
    python src/rfm_analysis.py
    ```
 
-4. **Open Jupyter notebook**:
+4. **Scale the RFM data**:
+   ```bash
+   python src/rfm_scaling.py
+   ```
+
+5. **Test the scaling**:
+   ```bash
+   python src/test_scaling.py
+   ```
+
+6. **Open Jupyter notebook**:
    ```bash
    jupyter notebook notebooks/01_rfm_analysis.ipynb
    ```
 
 ### Running the Analysis
 
-#### Option 1: Python Script
+#### Option 1: Python Scripts (Step by Step)
 ```bash
-cd src
-python rfm_analysis.py
+# Step 1: RFM Analysis
+python src/rfm_analysis.py
+
+# Step 2: Data Scaling
+python src/rfm_scaling.py
+
+# Step 3: Test Scaling
+python src/test_scaling.py
 ```
 
 #### Option 2: Jupyter Notebook
@@ -129,10 +171,12 @@ jupyter notebook 01_rfm_analysis.ipynb
 ### Expected Output
 - Raw transaction data saved to `data/raw/sample_transactions.csv`
 - RFM metrics table saved to `data/processed/rfm_table.csv`
+- Scaled RFM data saved to `data/processed/rfm_scaled.csv`
 - Console output showing:
   - Dataset generation statistics
   - Data cleaning results
   - RFM metrics for first 10 customers
+  - Scaling statistics (mean ≈ 0, std ≈ 1)
   - Summary statistics
 
 ## Future Work
