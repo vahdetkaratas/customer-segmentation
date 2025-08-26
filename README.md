@@ -61,7 +61,43 @@ CUST_0003       -0.793          0.729         0.598
 CUST_0004        0.704         -0.706        -0.722
 ```
 
-**Testing**: A test script (`src/test_scaling.py`) verifies that scaled features have mean ≈ 0 and std ≈ 1 within tolerance.
+**Testing**: Pytest tests (`tests/test_scaling.py`) verify that scaled features have mean ≈ 0 and std ≈ 1 within tolerance.
+
+### Step 3: KMeans Clustering & Model Selection
+After scaling the RFM data, we use KMeans clustering to group customers into distinct segments. The optimal number of clusters (k) is determined using multiple validation metrics:
+
+**K-Selection Process**:
+- **Range**: Test k values from 2 to 10
+- **Primary Criterion**: Maximum Silhouette Score (measures cluster cohesion and separation)
+- **Tie-breaker 1**: Highest Calinski-Harabasz Index (ratio of between-cluster to within-cluster dispersion)
+- **Tie-breaker 2**: Lowest Davies-Bouldin Index (average similarity measure, lower is better)
+
+**Validation Metrics Used**:
+- **Inertia**: Sum of squared distances to centroids (for Elbow method)
+- **Silhouette Score**: Range [-1, 1], higher values indicate better clustering
+- **Calinski-Harabasz Index**: Higher values indicate better-defined clusters
+- **Davies-Bouldin Index**: Lower values indicate better clustering
+
+**Results**: For our dataset, the optimal k=3 was selected based on the highest Silhouette Score.
+
+**Generated Artifacts**:
+- `data/processed/labels_k3.csv` - Customer segment assignments
+- `data/processed/rfm_with_segment.csv` - Original RFM data with segment labels
+- `models/kmeans_k3.joblib` - Trained KMeans model for future predictions
+
+**Visualizations Created**:
+- `reports/figures/elbow_inertia.png` - Elbow plot showing inertia vs k
+- `reports/figures/silhouette_scores.png` - Silhouette scores for different k values
+- `reports/figures/cluster_validity_indices.png` - Calinski-Harabasz and Davies-Bouldin indices
+- `reports/figures/pca_scatter_k3.png` - 2D PCA visualization of clusters
+- `reports/figures/heatmap_rfm_by_segment_k3.png` - RFM profile heatmap by segment
+
+**Segment Interpretation Checklist**:
+- **High Monetary, Low Frequency**: Premium customers who make large but infrequent purchases
+- **High Recency (inactive)**: Customers who haven't purchased recently (at-risk)
+- **VIP Segments**: High Monetary + High Frequency + Low Recency
+- **Bargain Hunters**: Low Monetary + High Frequency
+- **Occasional Customers**: Low Frequency + Low Monetary
 
 ### Clustering Approach
 The project uses machine learning clustering algorithms to group customers based on their RFM scores:
@@ -79,16 +115,25 @@ customer-segmentation/
 │   │   └── sample_transactions.csv
 │   └── processed/              # Cleaned and processed data
 │       ├── rfm_table.csv       # RFM metrics per customer
-│       └── rfm_scaled.csv      # Scaled RFM data for clustering
+│       ├── rfm_scaled.csv      # Scaled RFM data for clustering
+│       ├── labels_k3.csv       # Customer segment assignments
+│       └── rfm_with_segment.csv # RFM data with segment labels
 ├── notebooks/                  # Jupyter notebooks for analysis
-│   └── 01_rfm_analysis.ipynb
+│   ├── 01_rfm_analysis.ipynb   # Step 1: RFM analysis
+│   └── 02_clustering.ipynb     # Step 3: Clustering analysis
 ├── src/                        # Python source code
 │   ├── rfm_analysis.py         # Step 1: RFM analysis
-│   ├── rfm_scaling.py          # Step 2: Data scaling
-│   └── test_scaling.py         # Scaling verification tests
+│   └── rfm_scaling.py          # Step 2: Data scaling
+├── tests/                      # Pytest test suite
+│   ├── __init__.py
+│   ├── conftest.py             # Pytest configuration and fixtures
+│   ├── test_scaling.py         # Scaling tests
+│   └── test_clustering.py      # Clustering tests
+├── models/                     # Trained machine learning models
+│   └── kmeans_k3.joblib        # KMeans clustering model
 ├── streamlit_app/              # Interactive web application
 ├── reports/                    # Generated reports and visualizations
-│   └── figures/
+│   └── figures/                # Clustering validation plots
 ├── requirements.txt            # Python dependencies
 └── README.md                   # Project documentation
 ```
@@ -140,10 +185,20 @@ customer-segmentation/
 
 5. **Test the scaling**:
    ```bash
-   python src/test_scaling.py
+   pytest -q tests/test_scaling.py
    ```
 
-6. **Open Jupyter notebook**:
+6. **Run clustering analysis**:
+   ```bash
+   jupyter notebook notebooks/02_clustering.ipynb
+   ```
+
+7. **Run all tests**:
+   ```bash
+   pytest -q
+   ```
+
+8. **Open Jupyter notebook**:
    ```bash
    jupyter notebook notebooks/01_rfm_analysis.ipynb
    ```
@@ -159,7 +214,13 @@ python src/rfm_analysis.py
 python src/rfm_scaling.py
 
 # Step 3: Test Scaling
-python src/test_scaling.py
+pytest -q tests/test_scaling.py
+
+# Step 4: Run Clustering (via notebook)
+jupyter notebook notebooks/02_clustering.ipynb
+
+# Step 5: Run All Tests
+pytest -q
 ```
 
 #### Option 2: Jupyter Notebook
@@ -172,20 +233,27 @@ jupyter notebook 01_rfm_analysis.ipynb
 - Raw transaction data saved to `data/raw/sample_transactions.csv`
 - RFM metrics table saved to `data/processed/rfm_table.csv`
 - Scaled RFM data saved to `data/processed/rfm_scaled.csv`
+- Customer segments saved to `data/processed/labels_k3.csv`
+- Merged RFM data with segments saved to `data/processed/rfm_with_segment.csv`
+- Trained KMeans model saved to `models/kmeans_k3.joblib`
+- Validation plots saved to `reports/figures/`
 - Console output showing:
   - Dataset generation statistics
   - Data cleaning results
   - RFM metrics for first 10 customers
   - Scaling statistics (mean ≈ 0, std ≈ 1)
+  - Clustering validation metrics
+  - Optimal k selection (k=3)
+  - Segment distribution
   - Summary statistics
 
 ## Future Work
 
-### Phase 2: Advanced Segmentation
-- [ ] Implement K-means clustering on RFM scores
-- [ ] Add hierarchical clustering for validation
-- [ ] Create segment profiles and characteristics
-- [ ] Develop segment-specific marketing strategies
+### Phase 2: Advanced Segmentation ✅ COMPLETED
+- [x] Implement K-means clustering on RFM scores
+- [x] Add hierarchical clustering for validation
+- [x] Create segment profiles and characteristics
+- [x] Develop segment-specific marketing strategies
 
 ### Phase 3: Interactive Dashboard
 - [ ] Build Streamlit web application
