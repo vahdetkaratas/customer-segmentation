@@ -99,6 +99,40 @@ After scaling the RFM data, we use KMeans clustering to group customers into dis
 - **Bargain Hunters**: Low Monetary + High Frequency
 - **Occasional Customers**: Low Frequency + Low Monetary
 
+### Step 4: Alternative Clustering Methods
+To validate and compare with KMeans results, we implemented two additional clustering approaches:
+
+**DBSCAN (Density-Based Spatial Clustering of Applications with Noise)**:
+- **Advantage**: Can detect outliers and clusters of varying shapes and densities
+- **Parameters**: eps (neighborhood radius) and min_samples (minimum points to form cluster)
+- **Results**: Best configuration found with eps=0.5, min_samples=5, yielding 3 clusters and 70 noise points
+- **Use Case**: Better when you want to identify outliers or when clusters have irregular shapes
+
+**Hierarchical Clustering (Agglomerative with Ward Linkage)**:
+- **Advantage**: Creates a tree structure showing relationships between clusters
+- **Parameters**: n_clusters (number of clusters) and linkage method (Ward)
+- **Results**: Best configuration found with k=2 clusters using Ward linkage
+- **Use Case**: Better when you want to understand the hierarchical structure of customer relationships
+
+**Generated Artifacts**:
+- `data/processed/dbscan_labels.csv` - DBSCAN segment assignments
+- `data/processed/hierarchical_labels.csv` - Hierarchical segment assignments
+- `data/processed/rfm_with_dbscan.csv` - RFM data with DBSCAN segments
+- `data/processed/rfm_with_hierarchical.csv` - RFM data with hierarchical segments
+- `models/dbscan_best.joblib` - Trained DBSCAN model
+- `models/hierarchical_k2.joblib` - Trained hierarchical model
+
+**Visualizations Created**:
+- `reports/figures/dbscan_scatter.png` - DBSCAN clusters with noise points highlighted
+- `reports/figures/hierarchical_dendrogram.png` - Dendrogram showing cluster hierarchy
+- `reports/figures/hierarchical_scatter.png` - Hierarchical clustering results
+- `reports/figures/clustering_comparison.csv` - Comparative metrics table
+
+**Method Selection Guidelines**:
+- **Use KMeans**: When you expect spherical, well-separated clusters of similar sizes
+- **Use DBSCAN**: When you want to detect outliers or have clusters of varying densities
+- **Use Hierarchical**: When you want to understand the hierarchical structure of customer relationships
+
 ### Clustering Approach
 The project uses machine learning clustering algorithms to group customers based on their RFM scores:
 - **K-means Clustering**: Primary segmentation method
@@ -116,11 +150,16 @@ customer-segmentation/
 │   └── processed/              # Cleaned and processed data
 │       ├── rfm_table.csv       # RFM metrics per customer
 │       ├── rfm_scaled.csv      # Scaled RFM data for clustering
-│       ├── labels_k3.csv       # Customer segment assignments
-│       └── rfm_with_segment.csv # RFM data with segment labels
+│       ├── labels_k3.csv       # KMeans customer segment assignments
+│       ├── rfm_with_segment.csv # RFM data with KMeans segment labels
+│       ├── dbscan_labels.csv   # DBSCAN segment assignments
+│       ├── rfm_with_dbscan.csv # RFM data with DBSCAN segment labels
+│       ├── hierarchical_labels.csv # Hierarchical segment assignments
+│       └── rfm_with_hierarchical.csv # RFM data with hierarchical segment labels
 ├── notebooks/                  # Jupyter notebooks for analysis
 │   ├── 01_rfm_analysis.ipynb   # Step 1: RFM analysis
-│   └── 02_clustering.ipynb     # Step 3: Clustering analysis
+│   ├── 02_clustering.ipynb     # Step 3: KMeans clustering analysis
+│   └── 03_alternative_clustering.ipynb # Step 4: Alternative clustering methods
 ├── src/                        # Python source code
 │   ├── rfm_analysis.py         # Step 1: RFM analysis
 │   └── rfm_scaling.py          # Step 2: Data scaling
@@ -128,12 +167,15 @@ customer-segmentation/
 │   ├── __init__.py
 │   ├── conftest.py             # Pytest configuration and fixtures
 │   ├── test_scaling.py         # Scaling tests
-│   └── test_clustering.py      # Clustering tests
+│   ├── test_clustering.py      # KMeans clustering tests
+│   └── test_alternative_clustering.py # Alternative clustering tests
 ├── models/                     # Trained machine learning models
-│   └── kmeans_k3.joblib        # KMeans clustering model
+│   ├── kmeans_k3.joblib        # KMeans clustering model
+│   ├── dbscan_best.joblib      # DBSCAN clustering model
+│   └── hierarchical_k2.joblib  # Hierarchical clustering model
 ├── streamlit_app/              # Interactive web application
 ├── reports/                    # Generated reports and visualizations
-│   └── figures/                # Clustering validation plots
+│   └── figures/                # Clustering validation plots and comparisons
 ├── requirements.txt            # Python dependencies
 └── README.md                   # Project documentation
 ```
@@ -193,7 +235,12 @@ customer-segmentation/
    jupyter notebook notebooks/02_clustering.ipynb
    ```
 
-7. **Run all tests**:
+7. **Run alternative clustering analysis**:
+   ```bash
+   jupyter notebook notebooks/03_alternative_clustering.ipynb
+   ```
+
+8. **Run all tests**:
    ```bash
    pytest -q
    ```
@@ -219,7 +266,10 @@ pytest -q tests/test_scaling.py
 # Step 4: Run Clustering (via notebook)
 jupyter notebook notebooks/02_clustering.ipynb
 
-# Step 5: Run All Tests
+# Step 5: Run Alternative Clustering (via notebook)
+jupyter notebook notebooks/03_alternative_clustering.ipynb
+
+# Step 6: Run All Tests
 pytest -q
 ```
 
@@ -236,7 +286,10 @@ jupyter notebook 01_rfm_analysis.ipynb
 - Customer segments saved to `data/processed/labels_k3.csv`
 - Merged RFM data with segments saved to `data/processed/rfm_with_segment.csv`
 - Trained KMeans model saved to `models/kmeans_k3.joblib`
-- Validation plots saved to `reports/figures/`
+- DBSCAN segments saved to `data/processed/dbscan_labels.csv`
+- Hierarchical segments saved to `data/processed/hierarchical_labels.csv`
+- Alternative clustering models saved to `models/`
+- Validation plots and comparisons saved to `reports/figures/`
 - Console output showing:
   - Dataset generation statistics
   - Data cleaning results
@@ -245,6 +298,8 @@ jupyter notebook 01_rfm_analysis.ipynb
   - Clustering validation metrics
   - Optimal k selection (k=3)
   - Segment distribution
+  - Alternative clustering results (DBSCAN, Hierarchical)
+  - Comparative analysis metrics
   - Summary statistics
 
 ## Future Work
