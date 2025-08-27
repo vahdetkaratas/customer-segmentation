@@ -179,6 +179,52 @@ Transform clustering results into actionable business insights with comprehensiv
 - Use `pytest -q` to verify all reporting outputs are correctly generated
 - Share the generated reports with stakeholders for business decision-making
 
+### Step 6: Streamlit Demo (Try It Locally)
+Interactive web application for real-time customer segmentation analysis:
+
+**Features**:
+- **File Upload**: Upload your own CSV transaction data or use built-in sample data
+- **Algorithm Selection**: Choose between KMeans, DBSCAN, or Hierarchical clustering
+- **Parameter Tuning**: Adjust clustering parameters via interactive sliders
+- **Real-time Analysis**: View RFM summary, clustering metrics, and visualizations instantly
+- **Download Results**: Export segments and RFM data as CSV files
+- **Caching**: Heavy computations are cached for better performance
+
+**How to Use**:
+1. **Launch the app**:
+   ```bash
+   streamlit run streamlit_app/app.py
+   ```
+
+2. **Upload Data**: Either upload a CSV file with columns `CustomerID`, `InvoiceDate`, `InvoiceNo`, `Quantity`, `UnitPrice`, or check "Use sample data"
+
+3. **Configure Clustering**:
+   - **KMeans**: Adjust number of clusters (2-10)
+   - **DBSCAN**: Adjust eps (0.1-2.0) and min_samples (2-20)
+   - **Hierarchical**: Adjust number of clusters (2-10)
+
+4. **View Results**:
+   - RFM summary statistics
+   - Clustering validation metrics (Silhouette, Calinski-Harabasz, Davies-Bouldin)
+   - 2D PCA visualization of clusters
+   - Segment profile heatmap
+   - Download buttons for results
+
+**Technical Notes**:
+- **Metrics**: Silhouette score ranges from -1 to 1 (higher is better)
+- **Limitations**: Large datasets (>10,000 customers) may be slow; consider sampling
+- **Caching**: Results are cached based on input data and parameters for faster re-runs
+- **Error Handling**: Graceful handling of invalid data and clustering failures
+
+**Generated Artifacts**:
+- `data/processed/rfm_table.csv` - RFM metrics computed from uploaded data
+- `data/processed/rfm_scaled.csv` - Scaled RFM data for clustering
+- `data/processed/segments_app.csv` - Customer segment assignments from the app
+
+**Testing**:
+- Run `pytest tests/test_app_core.py -v` to test the core functionality
+- Tests cover data loading, RFM computation, scaling, clustering algorithms, and evaluation metrics
+
 ### Clustering Approach
 The project uses machine learning clustering algorithms to group customers based on their RFM scores:
 - **K-means Clustering**: Primary segmentation method
@@ -214,19 +260,22 @@ customer-segmentation/
 ├── src/                        # Python source code
 │   ├── rfm_analysis.py         # Step 1: RFM analysis
 │   ├── rfm_scaling.py          # Step 2: Data scaling
-│   └── interpretation_reporting.py # Step 5: Segment profiling and reporting
+│   ├── interpretation_reporting.py # Step 5: Segment profiling and reporting
+│   └── app_core.py             # Step 6: Core logic for Streamlit app
 ├── tests/                      # Pytest test suite
 │   ├── __init__.py
 │   ├── conftest.py             # Pytest configuration and fixtures
 │   ├── test_scaling.py         # Scaling tests
 │   ├── test_clustering.py      # KMeans clustering tests
 │   ├── test_alternative_clustering.py # Alternative clustering tests
-│   └── test_reporting.py       # Segment profiling and reporting tests
+│   ├── test_reporting.py       # Segment profiling and reporting tests
+│   └── test_app_core.py        # Step 6: Streamlit app core logic tests
 ├── models/                     # Trained machine learning models
 │   ├── kmeans_k3.joblib        # KMeans clustering model
 │   ├── dbscan_best.joblib      # DBSCAN clustering model
 │   └── hierarchical_k2.joblib  # Hierarchical clustering model
 ├── streamlit_app/              # Interactive web application
+│   └── app.py                  # Step 6: Streamlit UI
 ├── reports/                    # Generated reports and visualizations
 │   ├── figures/                # Clustering validation plots and comparisons
 │   ├── segment_report.md       # Comprehensive markdown report
@@ -305,10 +354,15 @@ customer-segmentation/
    pytest -q
    ```
 
-8. **Open Jupyter notebook**:
-   ```bash
-   jupyter notebook notebooks/01_rfm_analysis.ipynb
-   ```
+10. **Try the interactive Streamlit app**:
+    ```bash
+    streamlit run streamlit_app/app.py
+    ```
+
+11. **Open Jupyter notebook**:
+    ```bash
+    jupyter notebook notebooks/01_rfm_analysis.ipynb
+    ```
 
 ### Running the Analysis
 
@@ -368,6 +422,7 @@ jupyter notebook 01_rfm_analysis.ipynb
   - Segment profiling and business labeling
   - Automated report generation
   - Summary statistics
+  - Streamlit app running on localhost with interactive interface
 
 ## Future Work
 
