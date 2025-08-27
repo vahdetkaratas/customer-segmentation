@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Customer Segmentation Report</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        table { border-collapse: collapse; width: 100%; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background-color: #f2f2f2; }
+        img { max-width: 100%; height: auto; margin: 20px 0; }
+    </style>
+</head>
+<body>
+    <h1>Customer Segmentation Report</h1>
+    <p><strong>Generated:</strong> 2025-08-27 02:15:54</p>
+    <p><strong>Clustering Method:</strong> Kmeans</p>
+    <p><strong>Number of Segments:</strong> 3</p>
+    
+    <h2>Segment Overview</h2>
+    <table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>segment</th>
+      <th>n_customers</th>
+      <th>share_customers</th>
+      <th>avg_recency</th>
+      <th>median_recency</th>
+      <th>avg_frequency</th>
+      <th>median_frequency</th>
+      <th>avg_monetary</th>
+      <th>median_monetary</th>
+      <th>revenue_share</th>
+      <th>high_recency_share</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>0</td>
+      <td>511</td>
+      <td>0.516162</td>
+      <td>97.870841</td>
+      <td>85.0</td>
+      <td>3.749511</td>
+      <td>4.0</td>
+      <td>22873.718219</td>
+      <td>22610.160</td>
+      <td>0.380053</td>
+      <td>0.076321</td>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td>291</td>
+      <td>0.293939</td>
+      <td>98.384880</td>
+      <td>82.0</td>
+      <td>6.872852</td>
+      <td>7.0</td>
+      <td>53962.244983</td>
+      <td>53069.490</td>
+      <td>0.510587</td>
+      <td>0.085911</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>188</td>
+      <td>0.189899</td>
+      <td>383.744681</td>
+      <td>355.0</td>
+      <td>2.744681</td>
+      <td>3.0</td>
+      <td>17890.043085</td>
+      <td>16601.935</td>
+      <td>0.109359</td>
+      <td>0.978723</td>
+    </tr>
+  </tbody>
+</table>
+    
+    <h2>Visualizations</h2>
+    <h3>Segment Sizes</h3>
+    <img src="figures/segments_size_bar.png" alt="Segment Sizes">
+    
+    <h3>Revenue Share by Segment</h3>
+    <img src="figures/segments_revenue_share.png" alt="Revenue Share">
+    
+    <h3>RFM Profile Heatmap</h3>
+    <img src="figures/segments_rfm_heatmap.png" alt="RFM Heatmap">
+    
+    <h3>RFM Distributions</h3>
+    <img src="figures/segments_rfm_boxplots.png" alt="RFM Boxplots">
+    
+    <h2>Segment Narratives</h2>
+    <table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>segment</th>
+      <th>segment_label</th>
+      <th>short_description</th>
+      <th>campaign_ideas</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>0</td>
+      <td>General</td>
+      <td>Segment 0.0 represents a diverse group of customers with mixed RFM characteristics. They may include new customers or those with irregular purchasing patterns.</td>
+      <td>Welcome campaigns for new customers, general promotions, cross-selling opportunities</td>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td>General</td>
+      <td>Segment 1.0 represents a diverse group of customers with mixed RFM characteristics. They may include new customers or those with irregular purchasing patterns.</td>
+      <td>Welcome campaigns for new customers, general promotions, cross-selling opportunities</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>General</td>
+      <td>Segment 2.0 represents a diverse group of customers with mixed RFM characteristics. They may include new customers or those with irregular purchasing patterns.</td>
+      <td>Welcome campaigns for new customers, general promotions, cross-selling opportunities</td>
+    </tr>
+  </tbody>
+</table>
+</body>
+</html>

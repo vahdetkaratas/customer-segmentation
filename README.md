@@ -133,6 +133,52 @@ To validate and compare with KMeans results, we implemented two additional clust
 - **Use DBSCAN**: When you want to detect outliers or have clusters of varying densities
 - **Use Hierarchical**: When you want to understand the hierarchical structure of customer relationships
 
+### Step 5: Segment Profiling & Reporting
+Transform clustering results into actionable business insights with comprehensive profiling and automated reporting:
+
+**Segment Profiling Features**:
+- **Per-segment KPIs**: Customer count, revenue share, average RFM metrics, churn risk indicators
+- **Business Labeling**: Automatic assignment of human-readable labels (VIP Loyal, At-Risk, Regulars, etc.)
+- **Statistical Analysis**: Mean, median, and distribution analysis for each RFM metric per segment
+- **Revenue Analysis**: Revenue contribution and share calculations per segment
+
+**Visualizations for Stakeholders**:
+- **Segment Size Charts**: Bar charts showing customer distribution and share percentages
+- **Revenue Share Analysis**: Visual representation of revenue contribution by segment
+- **RFM Heatmaps**: Normalized heatmaps showing segment RFM profiles for easy comparison
+- **Distribution Boxplots**: Statistical distributions of R, F, M values across segments
+
+**Automated Reporting**:
+- **Markdown Reports**: Comprehensive `reports/segment_report.md` with executive summary, insights, and recommendations
+- **HTML Reports**: Web-friendly `reports/segment_report.html` for easy sharing and presentation
+- **Segment Narratives**: Template-based descriptions and campaign ideas for each segment
+- **Business Recommendations**: Actionable insights and next steps for marketing teams
+
+**Generated Artifacts**:
+- `data/processed/segment_profiles.csv` - Comprehensive segment statistics and KPIs
+- `data/processed/customer_segments_final.csv` - Customer data with segment assignments
+- `data/processed/customer_segments_labeled.csv` - Customer data with business labels
+- `data/processed/segment_narratives.csv` - Segment descriptions and campaign ideas
+- `reports/figures/segments_size_bar.png` - Segment size visualization
+- `reports/figures/segments_revenue_share.png` - Revenue share visualization
+- `reports/figures/segments_rfm_heatmap.png` - RFM profile heatmap
+- `reports/figures/segments_rfm_boxplots.png` - RFM distribution plots
+- `reports/segment_report.md` - Comprehensive markdown report
+- `reports/segment_report.html` - HTML version of the report
+
+**Business Label Categories**:
+- **VIP Loyal**: High monetary + high frequency + low recency (most valuable customers)
+- **High-Value Rare Buyers**: High monetary + low frequency + low recency (occasional big spenders)
+- **Regulars**: Medium RFM values (consistent moderate customers)
+- **At-Risk / Inactive**: High recency + low frequency (customers at risk of churning)
+- **General**: Mixed RFM characteristics (diverse customer group)
+
+**Usage Instructions**:
+- Run `python src/interpretation_reporting.py` to generate all profiling and reporting outputs
+- Modify `CLUSTER_SOURCE` variable in the script to switch between KMeans, DBSCAN, or Hierarchical results
+- Use `pytest -q` to verify all reporting outputs are correctly generated
+- Share the generated reports with stakeholders for business decision-making
+
 ### Clustering Approach
 The project uses machine learning clustering algorithms to group customers based on their RFM scores:
 - **K-means Clustering**: Primary segmentation method
@@ -155,27 +201,36 @@ customer-segmentation/
 │       ├── dbscan_labels.csv   # DBSCAN segment assignments
 │       ├── rfm_with_dbscan.csv # RFM data with DBSCAN segment labels
 │       ├── hierarchical_labels.csv # Hierarchical segment assignments
-│       └── rfm_with_hierarchical.csv # RFM data with hierarchical segment labels
+│       ├── rfm_with_hierarchical.csv # RFM data with hierarchical segment labels
+│       ├── segment_profiles.csv # Segment profiling statistics and KPIs
+│       ├── customer_segments_final.csv # Customer data with segment assignments
+│       ├── customer_segments_labeled.csv # Customer data with business labels
+│       └── segment_narratives.csv # Segment descriptions and campaign ideas
 ├── notebooks/                  # Jupyter notebooks for analysis
 │   ├── 01_rfm_analysis.ipynb   # Step 1: RFM analysis
 │   ├── 02_clustering.ipynb     # Step 3: KMeans clustering analysis
-│   └── 03_alternative_clustering.ipynb # Step 4: Alternative clustering methods
+│   ├── 03_alternative_clustering.ipynb # Step 4: Alternative clustering methods
+│   └── 04_interpretation_reporting.ipynb # Step 5: Segment profiling and reporting
 ├── src/                        # Python source code
 │   ├── rfm_analysis.py         # Step 1: RFM analysis
-│   └── rfm_scaling.py          # Step 2: Data scaling
+│   ├── rfm_scaling.py          # Step 2: Data scaling
+│   └── interpretation_reporting.py # Step 5: Segment profiling and reporting
 ├── tests/                      # Pytest test suite
 │   ├── __init__.py
 │   ├── conftest.py             # Pytest configuration and fixtures
 │   ├── test_scaling.py         # Scaling tests
 │   ├── test_clustering.py      # KMeans clustering tests
-│   └── test_alternative_clustering.py # Alternative clustering tests
+│   ├── test_alternative_clustering.py # Alternative clustering tests
+│   └── test_reporting.py       # Segment profiling and reporting tests
 ├── models/                     # Trained machine learning models
 │   ├── kmeans_k3.joblib        # KMeans clustering model
 │   ├── dbscan_best.joblib      # DBSCAN clustering model
 │   └── hierarchical_k2.joblib  # Hierarchical clustering model
 ├── streamlit_app/              # Interactive web application
 ├── reports/                    # Generated reports and visualizations
-│   └── figures/                # Clustering validation plots and comparisons
+│   ├── figures/                # Clustering validation plots and comparisons
+│   ├── segment_report.md       # Comprehensive markdown report
+│   └── segment_report.html     # HTML version of the report
 ├── requirements.txt            # Python dependencies
 └── README.md                   # Project documentation
 ```
@@ -240,7 +295,12 @@ customer-segmentation/
    jupyter notebook notebooks/03_alternative_clustering.ipynb
    ```
 
-8. **Run all tests**:
+8. **Run segment profiling and reporting**:
+   ```bash
+   python src/interpretation_reporting.py
+   ```
+
+9. **Run all tests**:
    ```bash
    pytest -q
    ```
@@ -269,7 +329,10 @@ jupyter notebook notebooks/02_clustering.ipynb
 # Step 5: Run Alternative Clustering (via notebook)
 jupyter notebook notebooks/03_alternative_clustering.ipynb
 
-# Step 6: Run All Tests
+# Step 6: Run Segment Profiling & Reporting
+python src/interpretation_reporting.py
+
+# Step 7: Run All Tests
 pytest -q
 ```
 
@@ -290,6 +353,8 @@ jupyter notebook 01_rfm_analysis.ipynb
 - Hierarchical segments saved to `data/processed/hierarchical_labels.csv`
 - Alternative clustering models saved to `models/`
 - Validation plots and comparisons saved to `reports/figures/`
+- Segment profiling data saved to `data/processed/`
+- Comprehensive reports saved to `reports/`
 - Console output showing:
   - Dataset generation statistics
   - Data cleaning results
@@ -300,6 +365,8 @@ jupyter notebook 01_rfm_analysis.ipynb
   - Segment distribution
   - Alternative clustering results (DBSCAN, Hierarchical)
   - Comparative analysis metrics
+  - Segment profiling and business labeling
+  - Automated report generation
   - Summary statistics
 
 ## Future Work
