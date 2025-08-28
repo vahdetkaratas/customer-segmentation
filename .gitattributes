@@ -1,0 +1,22 @@
+# Configure nbstripout for Jupyter notebooks
+*.ipynb filter=nbstripout
+
+# Ensure line endings are consistent
+*.py text eol=lf
+*.md text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+*.toml text eol=lf
+*.txt text eol=lf
+*.csv text eol=lf
+*.json text eol=lf
+
+# Binary files
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.pdf binary
+*.zip binary
+*.tar.gz binary
+*.joblib binary

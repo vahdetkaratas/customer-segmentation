@@ -1,5 +1,10 @@
 # Customer Segmentation Project
 
+![CI](https://img.shields.io/github/actions/workflow/status/<USER>/<REPO>/ci.yml?branch=main)
+![Python](https://img.shields.io/badge/python-3.11|3.12-blue)
+![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
+![Coverage](https://img.shields.io/codecov/c/github/<USER>/<REPO>)
+
 ## Project Description
 
 This project implements customer segmentation using RFM (Recency, Frequency, Monetary) analysis and machine learning clustering techniques. The goal is to identify distinct customer segments to enable targeted marketing strategies and improve customer relationship management.
@@ -224,6 +229,65 @@ Interactive web application for real-time customer segmentation analysis:
 **Testing**:
 - Run `pytest tests/test_app_core.py -v` to test the core functionality
 - Tests cover data loading, RFM computation, scaling, clustering algorithms, and evaluation metrics
+
+### Step 7: Packaging & CI
+Professional development setup with automated quality checks and continuous integration:
+
+**Development Environment Setup**:
+```bash
+# One-time setup
+make install
+```
+
+**Local Development Workflow**:
+```bash
+# Format, lint, and test
+make fmt && make lint && make test
+
+# Or run all checks at once
+make check
+
+# Run with coverage
+make test-cov
+
+# Start the Streamlit app
+make app
+
+# Clean up cache and build artifacts
+make clean
+```
+
+**CI Pipeline**:
+The GitHub Actions CI runs on every push and pull request:
+- **Matrix Testing**: Python 3.11 and 3.12 on Ubuntu
+- **Code Quality**: ruff linting, black formatting check, isort import sorting
+- **Testing**: pytest with coverage reporting
+- **Coverage**: Automatic upload to Codecov (if token provided)
+
+**Pre-commit Hooks**:
+Automated checks run before each commit:
+- **Code Formatting**: black, ruff --fix, isort
+- **File Hygiene**: trailing whitespace, end-of-file fixer
+- **Quality Checks**: YAML validation, large file detection
+
+**Manual Pre-commit Run**:
+```bash
+pre-commit run --all-files
+```
+
+**Project Structure**:
+- **`pyproject.toml`**: Centralized configuration for all tools
+- **`Makefile`**: Windows-friendly development commands
+- **`.pre-commit-config.yaml`**: Automated quality checks
+- **`.github/workflows/ci.yml`**: GitHub Actions CI pipeline
+- **`requirements.txt`**: Development dependencies included
+
+**Quality Standards**:
+- **Line Length**: 88 characters (black default)
+- **Import Sorting**: isort with black profile
+- **Linting**: ruff with common rules (E, F, I, UP, PL, W)
+- **Testing**: pytest with coverage reporting
+- **Notebook Hygiene**: Clean metadata on commit
 
 ### Clustering Approach
 The project uses machine learning clustering algorithms to group customers based on their RFM scores:
