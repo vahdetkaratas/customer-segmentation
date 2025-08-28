@@ -5,7 +5,6 @@
 ![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
 ![Coverage](https://img.shields.io/codecov/c/github/<USER>/<REPO>)
 
-
 # Customer Segmentation — RFM + Clustering
 
 **From raw transactions to actionable segments in minutes.**
@@ -326,8 +325,7 @@ customer-segmentation/
 │       ├── customer_segments_final.csv # Customer data with segment assignments
 │       ├── customer_segments_labeled.csv # Customer data with business labels
 │       └── segment_narratives.csv # Segment descriptions and campaign ideas
-├── notebooks/                  # Jupyter notebooks for analysis
-│   ├── 01_rfm_analysis.ipynb   # Step 1: RFM analysis
+├──    # Step 1: RFM analysis
 │   ├── 02_clustering.ipynb     # Step 3: KMeans clustering analysis
 │   ├── 03_alternative_clustering.ipynb # Step 4: Alternative clustering methods
 │   └── 04_interpretation_reporting.ipynb # Step 5: Segment profiling and reporting
@@ -410,12 +408,12 @@ customer-segmentation/
 
 6. **Run clustering analysis**:
    ```bash
-   jupyter notebook notebooks/02_clustering.ipynb
+   
    ```
 
 7. **Run alternative clustering analysis**:
    ```bash
-   jupyter notebook notebooks/03_alternative_clustering.ipynb
+   
    ```
 
 8. **Run segment profiling and reporting**:
@@ -433,9 +431,9 @@ customer-segmentation/
     streamlit run streamlit_app/app.py
     ```
 
-11. **Open Jupyter notebook**:
+11. **Open **:
     ```bash
-    jupyter notebook notebooks/01_rfm_analysis.ipynb
+    
     ```
 
 ### Running the Analysis
@@ -451,25 +449,24 @@ python src/rfm_scaling.py
 # Step 3: Test Scaling
 pytest -q tests/test_scaling.py
 
-# Step 4: Run Clustering (via notebook)
-jupyter notebook notebooks/02_clustering.ipynb
+# Step 4: Run Clustering
+python src/clustering.py
 
-# Step 5: Run Alternative Clustering (via notebook)
-jupyter notebook notebooks/03_alternative_clustering.ipynb
+# Step 5: Run Alternative Clustering
+python src/alternative_clustering.py
 
 # Step 6: Run Segment Profiling & Reporting
 python src/interpretation_reporting.py
 
 # Step 7: Run All Tests
 pytest -q
-```
 
-#### Option 2: Jupyter Notebook
-```bash
-cd notebooks
-jupyter notebook 01_rfm_analysis.ipynb
-```
+# Step 8: Generate Portfolio Assets
+python scripts/make_portfolio_assets.py
 
+# Step 9: Try the Interactive Streamlit App
+streamlit run streamlit_app/app.py
+```
 ### Expected Output
 - Raw transaction data saved to `data/raw/sample_transactions.csv`
 - RFM metrics table saved to `data/processed/rfm_table.csv`
@@ -523,7 +520,6 @@ jupyter notebook 01_rfm_analysis.ipynb
 - [ ] Automated segment naming and description
 - [ ] Predictive customer behavior modeling
 - [ ] Natural language query interface
-
 
 ### Step 8: Portfolio Assets & Quick Demo
 
