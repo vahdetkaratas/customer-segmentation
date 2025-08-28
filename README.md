@@ -464,9 +464,61 @@ pytest -q
 # Step 8: Generate Portfolio Assets
 python scripts/make_portfolio_assets.py
 
-# Step 9: Try the Interactive Streamlit App
+# Step 9: Data Cleaning & Validation (NEW!)
+python scripts/run_cleaning.py --input data/sample/online_retail_sample.csv
+
+# Step 10: Try the Interactive Streamlit App
 streamlit run streamlit_app/app.py
 ```
+
+
+## Step X: Data Cleaning & Validation (Analyze first, Apply on approval)
+
+Robust data cleaning with two-phase workflow: **ANALYZE** (detect issues, propose fixes) and **APPLY** (execute approved plan).
+
+### Analyze Mode (Dry-Run)
+Detects schema/type issues, duplicates, invalid values, outliers, thin customers. Writes human-readable reports:
+
+- `reports/cleaning_report.md` - Detailed analysis and proposed plan
+- `reports/cleaning_findings.json` - Machine-readable findings
+
+### Apply Mode
+Executes the approved plan and writes cleaned outputs:
+
+- `data/processed/transactions_cleaned.csv` - Cleaned transaction data
+- `data/processed/transactions_rejected.csv` - Rows that were removed
+- `data/processed/transactions_issues_catalog.csv` - Detailed issue tracking
+
+### Usage
+
+```bash
+# Analyze (no changes)
+python scripts/run_cleaning.py --input data/sample/online_retail_sample.csv
+
+# Apply after approval
+python scripts/run_cleaning.py --input data/sample/online_retail_sample.csv --apply
+
+# Apply an approved plan exactly
+python scripts/run_cleaning.py --input data/sample/online_retail_sample.csv --apply --plan-from path/to/plan.json
+```
+
+### Configuration
+See `config/cleaning_rules.yml` for thresholds and choices (drop vs winsorize vs flag).
+
+### Tests
+```bash
+pytest -q tests/test_cleaning.py
+```
+
+### Features
+- **Schema Validation**: Ensures required columns and data types
+- **Type Coercion**: Smart parsing of dates and numeric values
+- **Duplicate Detection**: Exact and near-duplicate identification
+- **Outlier Handling**: IQR-based detection with winsorization/dropping options
+- **Business Rules**: Invalid quantities/prices, thin customers, date range validation
+- **Audit Trail**: Complete tracking of what was changed and why
+- **Configurable**: YAML-based rules for easy customization
+
 ### Expected Output
 - Raw transaction data saved to `data/raw/sample_transactions.csv`
 - RFM metrics table saved to `data/processed/rfm_table.csv`

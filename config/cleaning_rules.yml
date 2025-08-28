@@ -1,0 +1,35 @@
+# Data Cleaning Configuration
+# Human-readable config for thresholds and rules
+
+expected_columns: ["CustomerID", "InvoiceDate", "InvoiceNo", "Quantity", "UnitPrice"]
+
+date:
+  required: true
+  min_span_days: 60   # ANALYZE warning if less
+  formats_hint: ["%Y-%m-%d", "%Y-%m-%d %H:%M:%S"]
+
+duplicates:
+  drop_exact: true
+  consider_near_duplicates: true
+  near_keys: ["CustomerID", "InvoiceNo", "InvoiceDate"]
+
+values:
+  quantity_min: 1
+  unitprice_min: 0.01
+
+outliers:
+  method: "iqr"
+  iqr_multiplier: 1.5
+  handle: "winsorize"   # options: "flag", "drop", "winsorize"
+  winsor_limits: [0.01, 0.99]
+
+customers:
+  flag_min_invoices: 2
+  drop_thin_customers: false
+
+outputs:
+  dryrun_report_md: "reports/cleaning_report.md"
+  dryrun_report_json: "reports/cleaning_findings.json"
+  cleaned_csv: "data/processed/transactions_cleaned.csv"
+  rejected_csv: "data/processed/transactions_rejected.csv"
+  issues_csv: "data/processed/transactions_issues_catalog.csv"

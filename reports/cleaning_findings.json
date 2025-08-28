@@ -1,0 +1,85 @@
+{
+  "timestamp": "2025-08-28T03:33:27.871059",
+  "config": {
+    "expected_columns": [
+      "CustomerID",
+      "InvoiceDate",
+      "InvoiceNo",
+      "Quantity",
+      "UnitPrice"
+    ],
+    "date": {
+      "required": true,
+      "min_span_days": 60,
+      "formats_hint": [
+        "%Y-%m-%d",
+        "%Y-%m-%d %H:%M:%S"
+      ]
+    },
+    "duplicates": {
+      "drop_exact": true,
+      "consider_near_duplicates": true,
+      "near_keys": [
+        "CustomerID",
+        "InvoiceNo",
+        "InvoiceDate"
+      ]
+    },
+    "values": {
+      "quantity_min": 1,
+      "unitprice_min": 0.01
+    },
+    "outliers": {
+      "method": "iqr",
+      "iqr_multiplier": 1.5,
+      "handle": "winsorize",
+      "winsor_limits": [
+        0.01,
+        0.99
+      ]
+    },
+    "customers": {
+      "flag_min_invoices": 2,
+      "drop_thin_customers": false
+    },
+    "outputs": {
+      "dryrun_report_md": "reports/cleaning_report.md",
+      "dryrun_report_json": "reports/cleaning_findings.json",
+      "cleaned_csv": "data/processed/transactions_cleaned.csv",
+      "rejected_csv": "data/processed/transactions_rejected.csv",
+      "issues_csv": "data/processed/transactions_issues_catalog.csv"
+    }
+  },
+  "issues": {
+    "total_rows": 20,
+    "missing_values": {},
+    "invalid_values": {},
+    "outliers": {
+      "UnitPrice": "4"
+    },
+    "date_span": {
+      "min_date": "2025-07-31 07:56:05",
+      "max_date": "2025-08-27 21:49:05",
+      "span_days": 27,
+      "warning": true
+    },
+    "thin_customers": 2,
+    "duplicates": {
+      "exact": 0,
+      "near": 0
+    }
+  },
+  "plan": [
+    {
+      "step": "winsorize_outliers",
+      "target": "UnitPrice",
+      "reason": "Winsorize 4 outliers in UnitPrice",
+      "count_estimate": "4"
+    }
+  ],
+  "samples": {
+    "invalid_quantities": [],
+    "invalid_prices": [],
+    "outliers": []
+  }
+}
