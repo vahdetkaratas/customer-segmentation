@@ -27,8 +27,8 @@ def test_labels_file_exists_and_count(project_root):
     rfm_scaled = pd.read_csv(processed_dir / "rfm_scaled.csv")
 
     # Test row count
-    assert len(labels_df) == len(
-        rfm_scaled
+    assert (
+        len(labels_df) == len(rfm_scaled)
     ), f"Labels file has {len(labels_df)} rows, but scaled data has {len(rfm_scaled)} rows"
 
     # Test required columns

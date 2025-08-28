@@ -11,7 +11,7 @@ repos:
       - id: debug-statements
 
   - repo: https://github.com/psf/black
-    rev: stable
+    rev: 24.1.1
     hooks:
       - id: black
         language_version: python3
@@ -28,13 +28,3 @@ repos:
     hooks:
       - id: isort
         args: ["--profile", "black"]
-
-  - repo: local
-    hooks:
-      - id: pytest-check
-        name: pytest-check
-        entry: pytest
-        language: system
-        pass_filenames: false
-        always_run: true
-        stages: [manual]

@@ -94,8 +94,8 @@ def test_dbscan_clustering_validation(project_root):
 
     # Test row count matches input data
     rfm_scaled = pd.read_csv(project_root / "data" / "processed" / "rfm_scaled.csv")
-    assert len(dbscan_labels_df) == len(
-        rfm_scaled
+    assert (
+        len(dbscan_labels_df) == len(rfm_scaled)
     ), f"DBSCAN labels count {len(dbscan_labels_df)} doesn't match input data count {len(rfm_scaled)}"
 
 
@@ -111,8 +111,8 @@ def test_hierarchical_clustering_validation(project_root):
 
     # Test row count matches input data
     rfm_scaled = pd.read_csv(project_root / "data" / "processed" / "rfm_scaled.csv")
-    assert len(hierarchical_labels_df) == len(
-        rfm_scaled
+    assert (
+        len(hierarchical_labels_df) == len(rfm_scaled)
     ), f"Hierarchical labels count {len(hierarchical_labels_df)} doesn't match input data count {len(rfm_scaled)}"
 
     # Test that all customers have labels
@@ -263,8 +263,8 @@ def test_comparison_table_exists(project_root):
     # Check that all three methods are present
     expected_methods = ["KMeans", "DBSCAN", "Hierarchical"]
     actual_methods = list(comparison_df["Method"])
-    assert set(actual_methods) == set(
-        expected_methods
+    assert (
+        set(actual_methods) == set(expected_methods)
     ), f"Comparison table methods {actual_methods} don't match expected {expected_methods}"
 
     # Check that n_clusters values are positive
