@@ -1,4 +1,4 @@
-.PHONY: help install fmt lint test test-cov app clean
+.PHONY: help install fmt lint test test-cov app clean assets
 
 # Default target
 help:
@@ -10,6 +10,7 @@ help:
 	@echo "  test-cov   - Run tests with coverage"
 	@echo "  app        - Run Streamlit app"
 	@echo "  clean      - Remove cache and build artifacts"
+	@echo "  assets     - Generate portfolio assets and figures"
 
 # Create virtual environment and install dependencies
 install:
@@ -54,6 +55,12 @@ test-cov:
 app:
 	@echo "Starting Streamlit app..."
 	@.venv\Scripts\activate && streamlit run streamlit_app\app.py
+
+# Generate portfolio assets
+assets:
+	@echo "Generating portfolio assets..."
+	@.venv\Scripts\activate && python scripts\make_portfolio_assets.py
+	@echo "Portfolio assets generated!"
 
 # Clean cache and build artifacts
 clean:

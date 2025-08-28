@@ -5,6 +5,16 @@
 ![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
 ![Coverage](https://img.shields.io/codecov/c/github/<USER>/<REPO>)
 
+
+# Customer Segmentation — RFM + Clustering
+
+**From raw transactions to actionable segments in minutes.**
+
+![Customer Segments](reports/figures/hero_pca_scatter.png)
+
+**[Try it now with Streamlit →](#step-6-streamlit-demo-try-it-locally)**
+
+---
 ## Project Description
 
 This project implements customer segmentation using RFM (Recency, Frequency, Monetary) analysis and machine learning clustering techniques. The goal is to identify distinct customer segments to enable targeted marketing strategies and improve customer relationship management.
@@ -513,6 +523,53 @@ jupyter notebook 01_rfm_analysis.ipynb
 - [ ] Automated segment naming and description
 - [ ] Predictive customer behavior modeling
 - [ ] Natural language query interface
+
+
+### Step 8: Portfolio Assets & Quick Demo
+
+This step creates professional portfolio assets and provides a quick demo experience for showcasing the project.
+
+#### Sample Datasets
+- **Main Dataset**: `data/sample/online_retail_sample.csv` (~600 rows, 143 customers)
+- **Tiny Dataset**: `data/sample/online_retail_tiny.csv` (~20 rows, 8 customers)
+- **Schema**: CustomerID, InvoiceDate, InvoiceNo, Quantity, UnitPrice
+- **Features**: Deterministic generation with realistic customer behavior patterns
+
+#### Portfolio Figures
+- **PCA Scatter**: `reports/figures/hero_pca_scatter.png` - Customer segments visualization
+- **RFM Heatmap**: `reports/figures/hero_rfm_heatmap.png` - Average RFM values by segment
+- **Segment Sizes**: `reports/figures/hero_segments_size.png` - Customer distribution by segment
+- **Revenue Share**: `reports/figures/hero_revenue_share.png` - Revenue distribution by segment
+
+#### Quick Demo GIF
+- **Animated Overview**: `reports/figures/quicklook.gif` - Stitched portfolio figures
+- **Requirements**: `imageio` package for GIF generation
+- **Fallback**: Graceful skip if imageio not available
+
+#### Try Quickly with Streamlit
+```bash
+# Install dependencies
+make install
+
+# Run Streamlit app
+streamlit run streamlit_app/app.py
+
+# In the app: check "Use sample data" for instant demo
+```
+
+#### Regenerate Assets
+```bash
+# Generate all portfolio assets
+make assets
+
+# Or run directly
+python scripts/make_portfolio_assets.py
+```
+
+#### Segment Profiles
+- **CSV Output**: `reports/figures/portfolio_segment_profiles.csv`
+- **Columns**: segment, n_customers, share_customers, revenue_share, avg_recency, avg_frequency, avg_monetary
+- **Validation**: Customer and revenue shares sum to 1.0 (within 1e-6 tolerance)
 
 ## Contributing
 
